@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="manifest" href="manifest.json">
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+    <script>
+
+    //Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyC31qLrmr8GynvQfhDSBmwMS182tR1Cnxk",
+        authDomain: "tokenmanager-78c3d.firebaseapp.com",
+        databaseURL: "https://tokenmanager-78c3d-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "tokenmanager-78c3d",
+        storageBucket: "tokenmanager-78c3d.appspot.com",
+        messagingSenderId: "516470203337",
+        appId: "1:516470203337:web:36ff7aa11e99f7c2167e18",
+        measurementId: "G-SWF1F588MN"
+    }
+    
+
+    //Inicjalizacja usług firebase
+    const app = firebase.initializeApp(firebaseConfig)
+    const messaging = firebase.messaging(app)
+    const db = firebase.database(app)
+    const vapidKey = "BCfilTSUAt6c6D5yQww1-uAEF7EbEYfifbmlzXl_xzolUG1gW3j7GAEKGmyRJctWLFTm-f2kSjvC96NQ-qnpkCU"
+
+    //Token
+    const FCMToken = "";
+    messaging.getToken({vapidKey: vapidKey}).then( (token) => {
+        if(token){
+            console.log("Token - ", token)
+            //BAZA DANYCH DO TOKENÓW
+        } else{
+            console.log("Token isn't available")
+        }
+    }).catch((err) =>{
+        console.log('Error occurred while retrieving token - ', err)
+    })
+
+    //Messaging
+    messaging.onMessage((payload)=>{
+        console.log("onMessage event fired", payload)
+    })
+
+    //SW
+    async function registerWorker(){
+        const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {scope: "/"})
+        console.log("Service worker registered")
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: vapidKey
+        })
+    }
+
+    if('serviceWorker' in navigator){
+        console.log("Registering service worker...")
+        registerWorker().catch(error => console.log(error))
+    } else{
+        console.log("Service worker not available")
+    }
+
+    </script>
+    <script src="firebase-base.js"></script>
+   
+
+
+    <title>Document</title>
+</head>
+<body>
+    <h1>CHUJ</h1>
+</body>
+</html>
