@@ -32,15 +32,17 @@
 
     //Token
     const FCMToken = "";
-    messaging.getToken({vapidKey: vapidKey}).then( (token) => {
+    window.addEventListener('click', () => {
+        messaging.getToken({vapidKey: vapidKey}).then( (token) => {
         if(token){
             console.log("Token - ", token)
             //BAZA DANYCH DO TOKENÓW
         } else{
             console.log("Token isn't available")
         }
-    }).catch((err) =>{
-        console.log('Error occurred while retrieving token - ', err)
+        }).catch((err) =>{
+            console.log('Error occurred while retrieving token - ', err)
+        })
     })
 
     //Messaging
@@ -73,6 +75,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>CHUJ</h1>
+    <h1>Kliknij</h1>
 </body>
 </html>
